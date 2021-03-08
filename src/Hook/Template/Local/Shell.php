@@ -17,6 +17,7 @@ use CaptainHook\App\CH;
 use CaptainHook\App\Hook\Template;
 use SebastianFeldmann\Camino\Path;
 use SebastianFeldmann\Camino\Path\Directory;
+use Symfony\Component\Process\PhpExecutableFinder;
 
 /**
  * Local class
@@ -77,6 +78,8 @@ class Shell extends Template\Local
             ];
         }
 
+        $phpFinder = new PhpExecutableFinder();
+        $php = $phpFinder->find();
 
         return array_merge(
             [
@@ -89,7 +92,8 @@ class Shell extends Template\Local
             $useTTY,
             [
                 '',
-                $this->executablePath
+                $php
+                    . ' ' . $this->executablePath
                     . ' $INTERACTIVE'
                     . ' --configuration=' . $this->configPath
                     . ' --bootstrap=' . $this->bootstrap
